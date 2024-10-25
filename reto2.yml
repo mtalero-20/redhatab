@@ -7,6 +7,8 @@
         path: /etc/ssh/sshd_config
         line: "PermitRootLogin no"
         regexp: '^PermitRootLogin\s*[^n]'
+      notify:  
+        - Restart sshd
       
      
 
