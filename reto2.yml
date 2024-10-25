@@ -1,14 +1,8 @@
 ---
-- name: Test for existence /etc/ssh/sshd_config
-  stat:
-    path: /etc/ssh/sshd_config
-  register: file_exists
-  when:
-	configure_strategy | bool
-	file_permissions_sshd_config | bool
-	low_complexity | bool
-	low_disruption | bool
-	medium_severity | bool
-	no_reboot_needed | bool
-	ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
- 
+    - name: 1.1.9 - Report to user if /var/tmp does not have nosuid set
+      debug:
+        msg: "FAILED CONTROL: /var/tmp/ does not have nosuid set"
+      when: mount_options is defined and "nodsuid" not in mount_options and mount_count == 0
+      changed_when: true
+      tags:
+        - 1.1.9
