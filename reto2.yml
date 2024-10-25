@@ -2,7 +2,7 @@
 - hosts: web
   become: yes
     tasks:
-      - name: 5.2.4 - Find all ssh public host keys
+      - name: - Find all ssh public host keys
           find:
             paths: /etc/ssh
             file_type: file
