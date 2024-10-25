@@ -2,10 +2,41 @@
 - hosts: web
   become: yes
     tasks:
-      - name: - Find all ssh public host keys
-          find:
-            paths: /etc/ssh
-            file_type: file
-            patterns: ssh_host_*_key.pub
-            register: ssh_hostpub_out
-            changed_when: false
+    - name: Disable SSH Root Login
+      block:
+        - name: Check for duplicate values
+          lineinfile:
+            path: /etc/ssh/sshd_config
+            create: true
+            regexp: (?i)^\s*PermitRootLogin\s+
+            state: absent
+          check_mode: true
+          changed_when: false
+          register: dupes
+        - name: Deduplicate values from /etc/ssh/sshd_config
+          lineinfile:
+            path: /etc/ssh/sshd_config
+            create: true
+            regexp: (?i)^\s*PermitRootLogin\s+
+            state: absent
+          when: dupes.found is defined and dupes.found > 1
+        - name: Insert correct line to /etc/ssh/sshd_config
+          lineinfile:
+            path: /etc/ssh/sshd_config
+            create: true
+            regexp: (?i)^\s*PermitRootLogin\s+
+            line: PermitRootLogin no
+            state: present
+            insertbefore: BOF
+            validate: /usr/sbin/sshd -t -f %s
+        when:
+        - DISA_STIG_RHEL_08_010550 | bool
+        - low_complexity | bool
+        - low_disruption | bool
+        - medium_severity | bool
+        - no_reboot_needed | bool
+        - restrict_strategy | bool
+        - sshd_disable_root_login | bool
+        - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+
+ 
