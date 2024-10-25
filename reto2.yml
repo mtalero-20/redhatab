@@ -9,3 +9,10 @@
         regexp: '^PermitRootLogin\s*[^n]'
       notify:  
         - Restart sshd
+    - name: 5.4.1 - Require minimum number of required classes of characters in passwords
+      lineinfile:
+        path: /etc/security/pwquality.conf
+        line: minclass = 4
+        regexp: "^minclass = 4"
+        insertafter: "^# minclass = 0"
+      when: password_req_digit
