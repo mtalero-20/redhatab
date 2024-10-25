@@ -15,12 +15,12 @@
         paths: /etc/sudoers.d/
         register: sudoers
           when:
-            - low_complexity | bool
-            - low_disruption | bool
-            - medium_severity | bool
-            - no_reboot_needed | bool
-            - restrict_strategy | bool
-            - sudo_require_authentication | bool
+            low_complexity | bool
+            low_disruption | bool
+            medium_severity | bool
+            no_reboot_needed | bool
+            restrict_strategy | bool
+            sudo_require_authentication | bool
          
 
  
