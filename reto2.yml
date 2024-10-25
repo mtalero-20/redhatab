@@ -1,8 +1,11 @@
 ---
-- name: 1.1.9 - Report to user if /var/tmp does not have nosuid set
-      debug:
-        msg: "FAILED CONTROL: /var/tmp/ does not have nosuid set"
-      when: mount_options is defined and "nodsuid" not in mount_options and mount_count == 0
-      changed_when: true
-      tags:
-        - 1.1.9
+- hosts: web
+  become: yes
+    tasks:
+      - name: 5.2.4 - Find all ssh public host keys
+          find:
+            paths: /etc/ssh
+            file_type: file
+            patterns: ssh_host_*_key.pub
+            register: ssh_hostpub_out
+            changed_when: false
