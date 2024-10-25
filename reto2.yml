@@ -9,12 +9,13 @@
         regexp: '^PermitRootLogin\s*[^n]'
       notify:  
         - Restart sshd
-        
-    - name: Find /etc/sudoers.d/ files
-      ansible.builtin.find:
-        paths: /etc/sudoers.d/
-        register: sudoers
-        when: sudo_require_authentication | bool
-         
+
+    - name: Ensure password expiration is {{ password_expire_days }} days or less
+      lineinfile:
+        dest: /etc/login.defs
+        regexp: '^PASS_MAX_DAYS\s*((?!{{ password_expire_days }}).)*$'
+        line: "PASS_MAX_DAYS  {{ password_expire_days }}"
+      state: present
+
 
  
