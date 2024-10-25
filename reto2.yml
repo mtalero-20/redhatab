@@ -12,8 +12,7 @@
 
     - name: Find /etc/sudoers.d/ files
       ansible.builtin.find:
-      paths:
-        - /etc/sudoers.d/
+      paths: /etc/sudoers.d/
       register: sudoers
       when:
         - low_complexity | bool
