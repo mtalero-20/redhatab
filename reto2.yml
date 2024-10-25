@@ -9,13 +9,10 @@
         regexp: '^PermitRootLogin\s*[^n]'
       notify:  
         - Restart sshd
-
+        
     - name: Ensure password expiration is {{ password_expire_days }} days or less
       lineinfile:
         dest: /etc/login.defs
         regexp: '^PASS_MAX_DAYS\s*((?!{{ password_expire_days }}).)*$'
         line: "PASS_MAX_DAYS  {{ password_expire_days }}"
       state: present
-
-
- 
