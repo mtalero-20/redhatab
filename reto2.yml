@@ -15,4 +15,10 @@
         line: minclass = 4
         regexp: "^minclass = 4"
         insertafter: "^# minclass = 0"
-      when: password_req_digit
+        
+    - name: 5.5.1.1 - Ensure password expiration is {{ password_expire_days }} days or less
+      lineinfile:
+        dest: /etc/login.defs
+        regexp: '^PASS_MAX_DAYS\s*((?!{{ password_expire_days }}).)*$'
+        line: "PASS_MAX_DAYS  {{ password_expire_days }}"
+      state: present
