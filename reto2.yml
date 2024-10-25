@@ -14,7 +14,7 @@
       ansible.builtin.find:
         paths: /etc/sudoers.d/
         register: sudoers
-          when: sudo_require_authentication | bool
+        when: sudo_require_authentication | bool
          
 
  
